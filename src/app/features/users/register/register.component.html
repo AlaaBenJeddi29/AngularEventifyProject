@@ -1,0 +1,125 @@
+<div class="container mt-4">
+  <form [formGroup]="formRegister" (ngSubmit)="save()">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group mb-3">
+          <label>First Name</label>
+          <input type="text" class="form-control" formControlName="firstName">
+          <div class="text-danger small" 
+               *ngIf="formRegister.get('firstName')?.touched && formRegister.get('firstName')?.invalid">
+            <div *ngIf="formRegister.get('firstName')?.hasError('required')">This field is required</div>
+            <div *ngIf="formRegister.get('firstName')?.hasError('minlength')">Minimum 3 characters</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="form-group mb-3">
+          <label>Last Name</label>
+          <input type="text" class="form-control" formControlName="lastName">
+          <div class="text-danger small" 
+               *ngIf="formRegister.get('lastName')?.touched && formRegister.get('lastName')?.invalid">
+            <div *ngIf="formRegister.get('lastName')?.hasError('required')">This field is required</div>
+            <div *ngIf="formRegister.get('lastName')?.hasError('minlength')">Minimum 3 characters</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group mb-3">
+      <label>Email</label>
+      <input type="email" class="form-control" formControlName="email">
+      <div class="text-danger small" 
+           *ngIf="formRegister.get('email')?.touched && formRegister.get('email')?.invalid">
+        <div *ngIf="formRegister.get('email')?.hasError('required')">Email is required</div>
+        <div *ngIf="formRegister.get('email')?.hasError('pattern')">Please enter a valid email</div>
+      </div>
+    </div>
+
+    <div class="form-group mb-3">
+      <label>Password</label>
+      <input type="password" class="form-control" formControlName="password">
+      <small class="text-muted">
+        Min 8 chars: lowercase, uppercase, number, special char (&#64;$!%*?&amp;)
+      </small>
+      <div class="text-danger small" 
+           *ngIf="formRegister.get('password')?.touched && formRegister.get('password')?.invalid">
+        <div *ngIf="formRegister.get('password')?.hasError('required')">Password is required</div>
+        <div *ngIf="formRegister.get('password')?.hasError('minlength') || formRegister.get('password')?.hasError('pattern')">
+          Password must be 8+ chars with uppercase, lowercase, number and special char
+        </div>
+      </div>
+    </div>
+
+    <hr>
+    <h5>Address</h5>
+    <div formGroupName="address">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group mb-3">
+            <label>Street</label>
+            <input type="text" class="form-control" formControlName="street">
+            <div class="text-danger small" *ngIf="formRegister.get('address.street')?.touched && formRegister.get('address.street')?.invalid">
+              Street is required
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group mb-3">
+            <label>City</label>
+            <input type="text" class="form-control" formControlName="city">
+            <div class="text-danger small" *ngIf="formRegister.get('address.city')?.touched && formRegister.get('address.city')?.invalid">
+              City is required
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group mb-3">
+            <label>State</label>
+            <input type="text" class="form-control" formControlName="state">
+            <div class="text-danger small" *ngIf="formRegister.get('address.state')?.touched && formRegister.get('address.state')?.invalid">
+              State is required
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group mb-3">
+            <label>ZIP Code</label>
+            <input type="text" class="form-control" formControlName="zip">
+            <div class="text-danger small" 
+                 *ngIf="formRegister.get('address.zip')?.touched && formRegister.get('address.zip')?.invalid">
+              <div *ngIf="formRegister.get('address.zip')?.hasError('required')">ZIP is required</div>
+              <div *ngIf="formRegister.get('address.zip')?.hasError('pattern')">Invalid ZIP format (4-6 digits)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+    <h5>Phone Numbers</h5>
+    <div formArrayName="phones">
+      <div class="mb-3" *ngFor="let phoneControl of phones.controls; let i = index">
+        <div class="input-group">
+          <input type="text" class="form-control" [formControlName]="i" placeholder="e.g. +216 12 345 678">
+          <button type="button" class="btn btn-outline-danger" (click)="removePhone(i)" 
+                  *ngIf="phones.length > 1">Remove</button>
+        </div>
+        <div class="text-danger small" 
+             *ngIf="phones.at(i).touched && phones.at(i).invalid">
+          <div *ngIf="phones.at(i).hasError('required')">Phone is required</div>
+          <div *ngIf="phones.at(i).hasError('pattern')">Invalid phone format</div>
+        </div>
+      </div>
+    </div>
+    <button type="button" class="btn btn-outline-secondary mb-3" (click)="addPhone()">+ Add Phone</button>
+
+    <div class="mt-4">
+      <button type="submit" class="btn btn-primary" [disabled]="formRegister.invalid">
+        Register
+      </button>
+    </div>
+  </form>
+</div>
