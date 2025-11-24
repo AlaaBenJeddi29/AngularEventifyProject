@@ -1,0 +1,11 @@
+.star {
+  transition: color 0.2s;
+}
+
+.star:hover {
+  transform: scale(1.2);
+}
+
+.feedback-list .card {
+  border-left: 4px solid #007bff;
+}
