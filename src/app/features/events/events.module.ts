@@ -10,6 +10,7 @@ import { SideBarComponent } from './side-bar/side-bar.component';
 import { CardEventComponent } from './card-event/card-event.component';
 import {SharedModule} from '../../shared/shared.module';
 import { FormEventComponent } from './form-event/form-event.component';
+import { CardEventComponent as CardEventComponent1 } from "../../layout/card-event/card-event.component";
 
 
 @NgModule({
@@ -25,8 +26,9 @@ import { FormEventComponent } from './form-event/form-event.component';
     CommonModule,
     EventsRoutingModule,
     FormsModule,
-    SharedModule
-  ]
+    SharedModule,
+    CardEventComponent1
+]
 
 })
 export class EventsModule { }

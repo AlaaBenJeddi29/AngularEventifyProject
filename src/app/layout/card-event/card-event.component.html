@@ -1,0 +1,43 @@
+<div class="event-card shadow-sm" *ngIf="e.title.toLowerCase().includes(searchValue && searchValue.toLowerCase()) || !searchValue">
+  <img [src]="e.imageUrl" class="card-img-top" alt="{{e.title}}">
+
+  <div class="card-body">
+    <h5 class="card-title">
+      {{ e.title }}
+      <small class="text-muted">👍 {{ e.nbrLike }}</small>
+    </h5>
+
+    <p class="price">{{ e.price | currency:'EUR':'symbol':'1.0-0' }}</p>
+    <p class="location">📍 {{ e.location }}</p>
+
+    <p [class.sold-out]="e.nbPlaces === 0" class="places mb-2">
+      {{ e.nbPlaces === 0 ? 'Complet' : e.nbPlaces + ' places disponibles' }}
+    </p>
+
+    <p class="description">{{ e.description }}</p>
+  </div>
+
+  <div class="card-footer">
+    <button class="btn btn-sm btn-like"
+            [class.btn-danger]="e.nbrLike >= 5"
+            [class.btn-warning]="e.nbrLike > 0 && e.nbrLike < 5"
+            [class.btn-outline-secondary]="e.nbrLike === 0"
+            (click)="nbrLike(e)">
+      👍 Like ({{ e.nbrLike }})
+    </button>
+
+    <div class="d-flex align-items-center gap-3">
+      <button class="btn btn-primary btn-sm btn-buy"
+              [disabled]="e.nbPlaces === 0"
+              (click)="nbrPlaceDecr(e)">
+        {{ e.nbPlaces === 0 ? 'Épuisé' : 'Acheter un ticket' }}
+      </button>
+
+      <span class="date">{{ e.date | date:'short' }}</span>
+
+      <a [routerLink]="['/details', e.id]" class="more-details">
+        Plus de détails →
+      </a>
+    </div>
+  </div>
+</div>

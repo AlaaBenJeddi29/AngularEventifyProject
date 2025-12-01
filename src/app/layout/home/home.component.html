@@ -1,3 +1,5 @@
+
+
 <!-- Section Hero -->
 <section class="bg-light py-5 text-center">
   <div class="container">
@@ -47,6 +49,15 @@
           <a href="/feedback" class="btn btn-outline-secondary btn-sm">Donner un feedback</a>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- Events Grid -->
+<section class="container py-5">
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+    <div class="col" *ngFor="let object of list">
+      <app-card [e]="object"></app-card>
     </div>
   </div>
 </section>

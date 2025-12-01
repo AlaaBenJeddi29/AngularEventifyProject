@@ -10,6 +10,7 @@ import { NotFoundComponent } from './layout/not-found/not-found.component';
 import {ListEventComponent} from './features/events/list-event/list-event.component';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
+import { CardEventComponent } from "./layout/card-event/card-event.component";
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import {HttpClientModule} from '@angular/common/http';
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-  ],
+    CardEventComponent
+],
   providers: [],
   bootstrap: [AppComponent]
 })
