@@ -7,7 +7,6 @@ import {ListEventComponent} from './list-event/list-event.component';
 import { DetailEventComponent } from './detail-event/detail-event.component';
 import {FormsModule} from "@angular/forms";
 import { SideBarComponent } from './side-bar/side-bar.component';
-import { CardEventComponent } from './card-event/card-event.component';
 import {SharedModule} from '../../shared/shared.module';
 import { FormEventComponent } from './form-event/form-event.component';
 import { CardEventComponent as CardEventComponent1 } from "../../layout/card-event/card-event.component";
@@ -19,7 +18,6 @@ import { CardEventComponent as CardEventComponent1 } from "../../layout/card-eve
     ListEventComponent,
     DetailEventComponent,
     SideBarComponent,
-    CardEventComponent,
     FormEventComponent
   ],
   imports: [
@@ -27,8 +25,8 @@ import { CardEventComponent as CardEventComponent1 } from "../../layout/card-eve
     EventsRoutingModule,
     FormsModule,
     SharedModule,
-    CardEventComponent1
+   SharedModule,
+  CardEventComponent1
 ]
-
 })
 export class EventsModule { }
