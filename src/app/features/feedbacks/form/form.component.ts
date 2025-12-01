@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FeedbackService } from '../../../shared/data/feedback.service';
+import { EventsService } from '../../../shared/data/events.service';
 import { Feedback } from '../../../models/feedback';
+import { Eventy } from '../../../models/eventy';
 
 @Component({
   selector: 'app-form',
@@ -11,8 +13,10 @@ import { Feedback } from '../../../models/feedback';
 export class FormComponent implements OnInit {
 
   eventId!: number;
+  currentEvent: Eventy | null = null;        // ← THIS WAS MISSING!
+  similarEvents: Eventy[] = [];               // ← THIS WAS MISSING!
   feedbacks: Feedback[] = [];
-  currentUserId = 1;               // ← change later with real auth
+  currentUserId = 1;
 
   // Form state
   isEditing = false;
@@ -22,11 +26,25 @@ export class FormComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private feedbackService: FeedbackService
+    private feedbackService: FeedbackService,
+    private eventsService: EventsService         // ← ADD THIS INJECTION
   ) {}
 
   ngOnInit(): void {
     this.eventId = +this.route.snapshot.paramMap.get('id')!;
+
+    // 1. Load current event
+    this.eventsService.getEventById(this.eventId).subscribe(event => {
+      this.currentEvent = event;
+
+      // 2. Load similar events in same location (exclude current)
+      this.eventsService.searchByLocation(event.location).subscribe(events => {
+        this.similarEvents = events
+          .filter(e => e.id !== this.eventId)
+          .slice(0, 6);
+      });
+    });
+
     this.loadFeedbacks();
   }
 

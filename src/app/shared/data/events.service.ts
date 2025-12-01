@@ -26,4 +26,5 @@ export class EventsService {
   searchByLocation(location:string){
     return this.http.get<Eventy[]>(this.urlBackend+'?location='+location)
   }
+
 }

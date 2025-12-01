@@ -86,3 +86,20 @@
     </div>
   </div>
 </div>
+
+<!-- Suggested Events in Same Location -->
+<div class="mt-5 pt-4 border-top" *ngIf="currentEvent">
+  <h3 class="mb-4 text-center fw-bold">
+    Autres événements à {{ currentEvent.location }}
+  </h3>
+
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <div class="col" *ngFor="let event of similarEvents">
+      <app-card [e]="event"></app-card>
+    </div>
+  </div>
+
+  <div class="text-center text-muted py-5" *ngIf="similarEvents.length === 0">
+    <p>Aucun autre événement à {{ currentEvent.location }} pour le moment.</p>
+  </div>
+</div>

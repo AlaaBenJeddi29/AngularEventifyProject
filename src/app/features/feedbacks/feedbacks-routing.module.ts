@@ -5,7 +5,9 @@ import { FormComponent } from './form/form.component';
 
 const routes: Routes = [{ path: '', component: FeedbacksComponent ,
    children:[
-  {path: 'event/:id', component: FormComponent}
+  {path: 'event/:id', component: FormComponent},
+  // feedbacks-routing.module.ts
+{ path: ':id', component: FeedbacksComponent }
 ] }];
 
 @NgModule({
