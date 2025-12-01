@@ -54,10 +54,36 @@
 </section>
 
 <!-- Events Grid -->
+<!-- Top 3 Most Liked Events -->
 <section class="container py-5">
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
-    <div class="col" *ngFor="let object of list">
-      <app-card [e]="object"></app-card>
+  <h2 class="text-center mb-5 fw-bold display-6">Événements les plus populaires</h2>
+
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">
+    <div class="col" *ngFor="let event of top3Events; let i = index">
+      <!-- Optional: add a badge for 1st, 2nd, 3rd -->
+      <div class="position-relative">
+        <app-card [e]="event"></app-card>
+
+        <!-- Beautiful ranking badge (1st, 2nd, 3rd) -->
+        <div class="position-absolute top-0 start-0 translate-middle-x"
+             style="z-index: 10; margin-left: 12px; margin-top: -12px;">
+          <span class="badge rounded-pill fs-6 px-3 py-2"
+                [ngClass]="{
+                  'bg-danger': i === 0,
+                  'bg-primary': i === 1,
+                  'bg-success': i === 2
+                }">
+            {{ i === 0 ? '1st' : i === 1 ? '2nd' : '3rd' }} place
+          </span>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <!-- Optional: "See all" button -->
+  <div class="text-center mt-5">
+    <a routerLink="/events" class="btn btn-outline-primary btn-lg">
+      Voir tous les événements →
+    </a>
   </div>
 </section>
