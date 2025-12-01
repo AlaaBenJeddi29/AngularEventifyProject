@@ -8,49 +8,64 @@ import { Eventy } from '../../../models/eventy';
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
-  styleUrl: './form.component.css'
+  styleUrls: ['./form.component.css']
 })
 export class FormComponent implements OnInit {
 
-  eventId!: number;
-  currentEvent: Eventy | null = null;        // ← THIS WAS MISSING!
-  similarEvents: Eventy[] = [];               // ← THIS WAS MISSING!
+  eventId: string = '';
+  currentEvent: Eventy | null = null;
+  similarEvents: Eventy[] = [];
   feedbacks: Feedback[] = [];
+
   currentUserId = 1;
 
-  // Form state
+  // Form
   isEditing = false;
-  editingId: number | null = null;
+  editingId: string | null = null;
   currentRate = 0;
   currentContent = '';
 
   constructor(
     private route: ActivatedRoute,
     private feedbackService: FeedbackService,
-    private eventsService: EventsService         // ← ADD THIS INJECTION
+    private eventsService: EventsService
   ) {}
 
-  ngOnInit(): void {
-    this.eventId = +this.route.snapshot.paramMap.get('id')!;
+ngOnInit(): void {
+  this.route.paramMap.subscribe(params => {
+    const id = params.get('id');
 
-    // 1. Load current event
-    this.eventsService.getEventById(this.eventId).subscribe(event => {
-      this.currentEvent = event;
+    if (!id) {
+      console.error('No event ID in URL');
+      return;
+    }
 
-      // 2. Load similar events in same location (exclude current)
-      this.eventsService.searchByLocation(event.location).subscribe(events => {
-        this.similarEvents = events
-          .filter(e => e.id !== this.eventId)
-          .slice(0, 6);
-      });
+    this.eventId = id; // ← string, pas de Number(), pas de +id
+
+    // CHARGE L'ÉVÉNEMENT → PAS DE CONVERSION !!!
+    this.eventsService.getEventById(this.eventId).subscribe({
+      next: (event) => {
+        this.currentEvent = event;
+
+        this.eventsService.searchByLocation(event.location).subscribe(events => {
+          this.similarEvents = events
+            .filter(e => e.id !== this.eventId)
+            .slice(0, 6);
+        });
+      },
+      error: (err) => {
+        console.error('Event not found:', this.eventId);
+        this.currentEvent = null;
+      }
     });
 
     this.loadFeedbacks();
-  }
+  });
+}
 
   loadFeedbacks() {
     this.feedbackService.getFeedbacks().subscribe((all: Feedback[]) => {
-      this.feedbacks = all.filter(f => f.id_event === this.eventId);
+      this.feedbacks = all.filter(f => f.id_event === this.eventId); // now both strings
     });
   }
 
@@ -59,11 +74,11 @@ export class FormComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.currentRate === 0) return;
+    if (this.currentRate === 0 || !this.currentContent.trim()) return;
 
     const payload: Feedback = {
       id_user: this.currentUserId,
-      id_event: this.eventId,
+      id_event: this.eventId,        // string
       content: this.currentContent,
       rate: this.currentRate
     };
@@ -84,7 +99,7 @@ export class FormComponent implements OnInit {
 
   startEdit(fb: Feedback) {
     this.isEditing = true;
-    this.editingId = fb.id!;
+    this.editingId = fb.id || null;
     this.currentRate = fb.rate;
     this.currentContent = fb.content;
   }
@@ -93,11 +108,9 @@ export class FormComponent implements OnInit {
     this.resetForm();
   }
 
-  deleteFeedback(id: number) {
+  deleteFeedback(id: string) {
     if (confirm('Supprimer ce commentaire ?')) {
-      this.feedbackService.deleteFeedback(id).subscribe(() => {
-        this.loadFeedbacks();
-      });
+      this.feedbackService.deleteFeedback(Number(id)).subscribe(() => this.loadFeedbacks());
     }
   }
 
@@ -106,5 +119,13 @@ export class FormComponent implements OnInit {
     this.editingId = null;
     this.currentRate = 0;
     this.currentContent = '';
+  }
+
+  private loadSimilarEvents(location: string) {
+    this.eventsService.searchByLocation(location).subscribe(events => {
+      this.similarEvents = events
+        .filter(e => e.id !== this.eventId)
+        .slice(0, 6);
+    });
   }
 }

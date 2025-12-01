@@ -10,6 +10,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 export class RegisterComponent implements OnInit {
   user: User;
   formRegister: FormGroup;
+gForm: any;
   constructor() {
   }
   ngOnInit() {

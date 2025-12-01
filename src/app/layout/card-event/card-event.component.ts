@@ -20,11 +20,11 @@ constructor(private eventService: EventsService) {
     = new EventEmitter();
   nbrPlaceDecr(e:Eventy){
     e.nbPlaces --
-    this.eventService.updateEvent(e.id,e).subscribe()
+    this.eventService.updateEvent(Number(e.id), e).subscribe()
   }
   //Marwa
   nbrLike(e:Eventy){
     e.nbrLike ++
-    this.eventService.updateEvent(e.id,e).subscribe()
+    this.eventService.updateEvent(Number(e.id), e).subscribe()
   }
 }
